@@ -15,15 +15,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // Array of trials
     var trialsArray:NSArray = []
     
-    @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var tableView: UITableView!    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.delegate = self
         tableView.dataSource = self
-        
         getData()
     }
     
@@ -51,6 +48,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
      
      *****************************************/
     func getData(){
+        
         let session = URLSession.shared
         let url = URL(string: "https://android.trialmonster.uk/getResultList.php")!
         let task = session.dataTask(with: url)
@@ -87,15 +85,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     func displayData(){
-           // let count = trialsArray.count
+            // let count = trialsArray.count
 
             for i in 0..<trialsArray.count {
                 let trial = trialsArray[i] as! NSDictionary
-                let id_: Int = trial["id"] as! Int
-                let date_: String = trial["date"] as! String
-                let club_: String = trial["club"]  as! String
-                let name_: String = trial["name"]  as! String
-               print(id_, date_, club_, name_)
+                let id: Int = trial["id"] as! Int
+                let date: String = trial["date"] as! String
+                let club: String = trial["club"]  as! String
+                let name: String = trial["name"]  as! String
+                let location: String = trial["location"]  as! String
+               print(id, date, club, name, location)
             }
         }
 }
