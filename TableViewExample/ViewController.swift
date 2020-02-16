@@ -40,7 +40,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let row = indexPath.row
         cell.textLabel?.text = swiftBlogs[row]
         idCell.textLabel?.text = String(row)
-        return idCell
+        return cell
     }
     
     
