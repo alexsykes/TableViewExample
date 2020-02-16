@@ -9,8 +9,11 @@
 import UIKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    let swiftBlogs = ["Alex","Sykes","BL6 5QD","07910765467", "16, Avonhead Close","alex@alexsykes.net"]
+    let swiftBlogs = ["Alex","Sykes","BL6 5QD","07910 765467", "16, Avonhead Close","alex@alexsykes.net"]
     let textCellIdentifier = "TextCell"
+    
+    // Array of trials
+    var trialsArray:NSArray = []
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -20,6 +23,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        getData()
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -37,5 +42,61 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.textLabel?.text = swiftBlogs[row]
         return cell
     }
+    
+    
+    
+    /******************************************
+     Get data from server using URLSession
+     @URL  - "https://android.trialmonster.uk/getResultList.php"
+     
+     *****************************************/
+    func getData(){
+        let session = URLSession.shared
+        let url = URL(string: "https://android.trialmonster.uk/getResultList.php")!
+        let task = session.dataTask(with: url)
+        { data, response, error in
+            if error != nil || data == nil {
+                print("Client error!")
+                return
+            }
+            guard let response = response as? HTTPURLResponse, (200...299).contains(response.statusCode) else
+            {
+                print("Server error!")
+                return
+            }
+            
+            guard let mime = response.mimeType, mime=="text/html" else {
+                print("Wrong MIME type!")
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                print("Success")
+                self.trialsArray = json as! NSArray
+
+                DispatchQueue.main.async {
+                    self.displayData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    
+    func displayData(){
+           // let count = trialsArray.count
+
+            for i in 0..<trialsArray.count {
+                let trial = trialsArray[i] as! NSDictionary
+                let id_: Int = trial["id"] as! Int
+                let date_: String = trial["date"] as! String
+                let club_: String = trial["club"]  as! String
+                let name_: String = trial["name"]  as! String
+               print(id_, date_, club_, name_)
+            }
+        }
 }
 
