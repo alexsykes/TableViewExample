@@ -11,11 +11,12 @@ import UIKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     let swiftBlogs = ["Alex","Sykes","BL6 5QD","07910 765467", "16, Avonhead Close","alex@alexsykes.net"]
     let textCellIdentifier = "TextCell"
+    let IDCellIdentifier = "IDCell"
     
     // Array of trials
     var trialsArray:NSArray = []
     
-    @IBOutlet weak var tableView: UITableView!    
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +35,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: textCellIdentifier, for: indexPath)
+        let idCell = tableView.dequeueReusableCell(withIdentifier: IDCellIdentifier, for: indexPath)
         
         let row = indexPath.row
         cell.textLabel?.text = swiftBlogs[row]
-        return cell
+        idCell.textLabel?.text = String(row)
+        return idCell
     }
     
     
